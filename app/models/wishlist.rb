@@ -1,6 +1,8 @@
 class Wishlist < ActiveRecord::Base
   belongs_to :user
-  has_many :wished_products
+  has_many :collection, :dependent => :destroy, :class_name => "WishedObject"
+  has_many :wished_products, :through => :collection, :source => :object, :source_type => 'Product'
+  
   before_create :set_access_hash
   
   def to_param
@@ -25,6 +27,7 @@ class Wishlist < ActiveRecord::Base
   private
   
   def set_access_hash
-    self.access_hash = Digest::SHA1.hexdigest("--#{user_id}--#{user.salt}--#{Time.now}--")
+    # Only creates the access hash once - allows the list to be saved w/o resetting the URL
+    self.access_hash = Digest::SHA1.hexdigest("--#{user_id}--#{user.salt}--#{Time.now}--") if self.access_hash.nil?
   end
 end

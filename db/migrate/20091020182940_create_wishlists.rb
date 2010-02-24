@@ -9,9 +9,11 @@ class CreateWishlists < ActiveRecord::Migration
 
       t.timestamps
     end
+    add_index :wishlists, :access_hash
   end
 
   def self.down
+    remove_index :wishlists, :access_hash
     drop_table :wishlists
   end
 end
