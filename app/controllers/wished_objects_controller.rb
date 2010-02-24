@@ -1,4 +1,4 @@
-class WishedProductsController < ApplicationController
+class WishedObjectController < ApplicationController
   resource_controller
 
   # I'm sorry for this hack, but it is simplest way to make adding to wishlist after user logged in,
@@ -8,18 +8,18 @@ class WishedProductsController < ApplicationController
   end
 
   create.before do
-    @wished_product.wishlist = current_user.wishlist
+    @wished_object.wishlist = current_user.wishlist
   end
   
   create.response do |wants|
-    wants.html { redirect_to @wished_product.wishlist }
+    wants.html { redirect_to @wished_object.wishlist }
   end
 
   update.response do |wants|
-    wants.html { redirect_to @wished_product.wishlist }
+    wants.html { redirect_to @wished_object.wishlist }
   end
   
   destroy.response do |wants|
-    wants.html { redirect_to @wished_product.wishlist }
+    wants.html { redirect_to @wished_object.wishlist }
   end
 end
