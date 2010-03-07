@@ -26,22 +26,27 @@ class WishlistExtension < Spree::Extension
       end
     end
 
-    ProductsController.class_eval do
-      after_filter :handle_wishlists, :wish_for
-      
+    ProductsController.class_eval do    
       def wish_for
         load_object
         load_data
         
-        redirect_to product_url(@product)
+        handle_wishlists
+        
+        respond_to do |format|
+          format.html { redirect_to product_url(@product) }
+          format.js { render :action => :wish_for }
+        end
       end
       
       private
       
       def handle_wishlists
-        current_user.wishlists.map{ |l| l.wished_products.delete(@product) }
-        wishlists = params[:wishlist_ids].map { |id| Wishlist.user_id_equals( current_user.id ).find( id ) }
-        wishlists.map { |l| l.wished_products << @product }
+        if params[:wishlist_ids]
+          current_user.wishlists.map{ |l| l.wished_products.delete(@product) }
+          wishlists = params[:wishlist_ids].map { |id| Wishlist.user_id_equals( current_user.id ).find( id ) }
+          wishlists.map { |l| l.wished_products << @product }
+        end
       end
     end
   end
