@@ -26,25 +26,23 @@ class WishlistExtension < Spree::Extension
       end
     end
 
-    # Add your extension tab to the admin.
-    # Requires that you have defined an admin controller:
-    # app/controllers/admin/yourextension_controller
-    # and that you mapped your admin in config/routes
-
-    #Admin::BaseController.class_eval do
-    #  before_filter :add_yourextension_tab
-    #
-    #  def add_yourextension_tab
-    #    # add_extension_admin_tab takes an array containing the same arguments expected
-    #    # by the tab helper method:
-    #    #   [ :extension_name, { :label => "Your Extension", :route => "/some/non/standard/route" } ]
-    #    add_extension_admin_tab [ :yourextension ]
-    #  end
-    #end
-
-    # make your helper avaliable in all views
-    # Spree::BaseController.class_eval do
-    #   helper YourHelper
-    # end
+    ProductsController.class_eval do
+      after_filter :handle_wishlists, :wish_for
+      
+      def wish_for
+        load_object
+        load_data
+        
+        redirect_to product_url(@product)
+      end
+      
+      private
+      
+      def handle_wishlists
+        current_user.wishlists.map{ |l| l.wished_products.delete(@product) }
+        wishlists = params[:wishlist_ids].map { |id| Wishlist.user_id_equals( current_user.id ).find( id ) }
+        wishlists.map { |l| l.wished_products << @product }
+      end
+    end
   end
 end
