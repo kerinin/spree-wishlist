@@ -27,17 +27,6 @@ class WishlistExtension < Spree::Extension
     end
 
     ProductsController.class_eval do    
-      def wish_for
-        load_object
-        load_data
-        
-        handle_wishlists
-        
-        respond_to do |format|
-          format.html { redirect_to product_url(@product) }
-          format.js { render :action => :wish_for }
-        end
-      end
       
       private
       
