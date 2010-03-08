@@ -21,9 +21,9 @@ class ProductsControllerTest < ActionController::TestCase
       Wishlist.delete_all
     end
 
-    context "on PUT to :wish_for" do
+    context "on POST to :wish_for" do
       setup do
-        put :wish_for, {:id => @product1.to_param, :wishlist_ids => [@list2.id, @list3.id]}
+        post :wish_for, {:id => @product1.to_param, :wishlist_ids => [@list2.id, @list3.id]}
       end
       should_respond_with :redirect
       should_redirect_to('product#show') { product_url(@product1) }
@@ -38,9 +38,9 @@ class ProductsControllerTest < ActionController::TestCase
       end
     end
     
-    context "on ajax PUT to :wish_for" do
+    context "on ajax POST to :wish_for" do
       setup do
-        xhr :put, :wish_for, {:id => @product1.to_param, :wishlist_ids => [@list2.id, @list3.id]}
+        xhr :post, :wish_for, {:id => @product1.to_param, :wishlist_ids => [@list2.id, @list3.id]}
       end
       should_assign_to :product
       should_respond_with :success
