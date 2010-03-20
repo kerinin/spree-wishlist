@@ -14,7 +14,11 @@ class WishlistsController < ApplicationController
   private
 
     def collection
-      end_of_association_chain.find(:all, :conditions => ['wishlists.is_private = ? OR wishlists.user_id = ?', false, current_user.id])
+      if current_user
+        end_of_association_chain.find(:all, :conditions => ['wishlists.is_private = ? OR wishlists.user_id = ?', false, current_user.id])
+      else
+        end_of_association_chain.find(:all, :conditions => ['wishlists.is_private = ?', false] )
+      end
     end
     
     def object
