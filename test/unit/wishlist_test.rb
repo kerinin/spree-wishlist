@@ -42,7 +42,7 @@ class WishlistTest < Test::Unit::TestCase
       assert @list2.collection.map(&:object).include? @product3
     end
     
-    should "act_as_list" do
+    should_eventually "act_as_list" do
       assert_equal @product1, @list1.collection.first.object
       
       @list1.collection.first.move_to_bottom
