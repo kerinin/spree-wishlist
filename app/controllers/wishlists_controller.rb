@@ -1,6 +1,7 @@
 class WishlistsController < ApplicationController
   resource_controller
   helper :products
+  belongs_to :user
   
   create.before do
     @wishlist.user = current_user

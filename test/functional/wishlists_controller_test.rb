@@ -74,6 +74,24 @@ class WishlistsControllerTest < ActionController::TestCase
         assert !( assigns['wishlists'].include? @list4 )
       end
     end 
+    
+    context "on GET to nested :index" do
+      setup do
+        get :index, {:user_id => @user1.id}
+      end
+      should_assign_to :user, :wishlists
+      should_respond_with :success
+      
+      should "include user's lists" do
+        assert assigns['wishlists'].include? @list1
+        assert assigns['wishlists'].include? @list2
+      end
+      
+      should "exclude non-owned lists" do
+        assert !( assigns['wishlists'].include? @list3 )
+        assert !( assigns['wishlists'].include? @list4 )
+      end
+    end
   end
 end
 
